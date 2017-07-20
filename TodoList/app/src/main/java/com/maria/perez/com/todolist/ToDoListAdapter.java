@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.maria.perez.com.todolist.data.Contract;
@@ -14,9 +15,6 @@ import com.maria.perez.com.todolist.data.ToDoItem;
 
 import java.util.ArrayList;
 
-/**
- * Created by mark on 7/4/17.
- */
 
 public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHolder> {
 
@@ -24,6 +22,12 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
     private ItemClickListener listener;
     private String TAG = "todolistadapter";
 
+    /**
+     * onCreateViewHolder creates the viewholders that will hold the various pieces of data
+     * @param parent
+     * @param viewType
+     * @return ItemHolder holder
+     */
     @Override
     public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -35,6 +39,11 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
         return holder;
     }
 
+    /**
+     * onBindViewHolder binds the info to the viewholder
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(ItemHolder holder, int position) {
         holder.bind(holder, position);
@@ -45,10 +54,19 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
         return cursor.getCount();
     }
 
+    /**
+     * ItemClickListener - Is an interface that is used in the MainActivity for when things are picked
+     */
     public interface ItemClickListener {
         void onItemClick(int pos, String description, String duedate, long id, String category, boolean completed);
     }
 
+    /**
+     * ToDoListAdapter
+     * This method creates the Adapter object
+     * @param cursor
+     * @param listener
+     */
     public ToDoListAdapter(Cursor cursor, ItemClickListener listener) {
         this.cursor = cursor;
         this.listener = listener;
@@ -64,27 +82,33 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
     }
 
     class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView descr;
-        TextView due;
-        String duedate;
-        String description;
-        String category;
-        boolean completed;
-        long id;
+        private TextView descr;
+        private TextView due;
+        private String duedate;
+        private String description;
+        private  String category;
+        private boolean completed;
+        private long id;
+        private CheckBox checkBox;
 
-        TextView mCategoryTextView;
 
 
+        // Create ItemHolder object
         ItemHolder(View view) {
             super(view);
             descr = (TextView) view.findViewById(R.id.description);
             due = (TextView) view.findViewById(R.id.dueDate);
 
-            mCategoryTextView = (TextView) view.findViewById(R.id.cat);
+            checkBox = (CheckBox) view.findViewById(R.id.checkbox);
 
             view.setOnClickListener(this);
         }
 
+        /**
+         * bindItems - This method binds the data to the itemholder. 
+         * @param holder
+         * @param pos
+         */
         public void bind(ItemHolder holder, int pos) {
             cursor.moveToPosition(pos);
             id = cursor.getLong(cursor.getColumnIndex(Contract.TABLE_TODO._ID));
@@ -96,7 +120,6 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
 
             descr.setText(description);
             due.setText(duedate);
-            mCategoryTextView.setText(category);
             holder.itemView.setTag(id);
         }
 

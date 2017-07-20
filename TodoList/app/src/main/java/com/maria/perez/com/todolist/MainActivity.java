@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.maria.perez.com.todolist.data.Contract;
 import com.maria.perez.com.todolist.data.DBHelper;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
     private SQLiteDatabase db;
     ToDoListAdapter adapter;
     private final String TAG = "mainactivity";
+
+    private CheckBox checkBox;
 
     // set default category to ALL
     private String selectedCategory = "all";
@@ -149,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
                 Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE
         );
     }
-/////////////////////////////////////////////////////////////////////////////
+
     private long addToDo(SQLiteDatabase db, String description, String duedate, String category, boolean completed) {
         ContentValues cv = new ContentValues();
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_DESCRIPTION, description);

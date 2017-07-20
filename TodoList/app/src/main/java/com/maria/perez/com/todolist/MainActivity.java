@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
 
                 FragmentManager fm = getSupportFragmentManager();
 
-                UpdateToDoFragment frag = UpdateToDoFragment.newInstance(year, month, day, description, id);
+                UpdateToDoFragment frag = UpdateToDoFragment.newInstance(year, month, day, description, id, category, completed);
                 frag.show(fm, "updatetodofragment");
             }
         });

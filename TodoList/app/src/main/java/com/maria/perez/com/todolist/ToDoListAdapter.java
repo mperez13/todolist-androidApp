@@ -116,7 +116,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
 
             descriptionTextView.setText(description);
             dueTextView.setText(duedate);
-
+            // Added listener for the checkbox
             checkBox.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){

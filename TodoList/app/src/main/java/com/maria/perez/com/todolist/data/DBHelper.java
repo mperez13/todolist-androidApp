@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
                 // Add columns for category and completed
                 Contract.TABLE_TODO.COLUMN_NAME_CATEGORY + " TEXT NOT NULL, " +
-                Contract.TABLE_TODO.COLUMN_NAME_COMPLETED + " INTEGER NOT NULL, " +
+                Contract.TABLE_TODO.COLUMN_NAME_COMPLETED + " BOOLEAN DEFAULT 0, " +
                 "); ";
 
         Log.d(TAG, "Create table SQL: " + queryString);

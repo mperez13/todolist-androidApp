@@ -19,7 +19,6 @@ import android.widget.CheckBox;
 
 import com.maria.perez.com.todolist.data.Contract;
 import com.maria.perez.com.todolist.data.DBHelper;
-import com.maria.perez.com.todolist.data.ToDoItem;
 
 public class MainActivity extends AppCompatActivity implements AddToDoFragment.OnDialogCloseListener, UpdateToDoFragment.OnUpdateDialogCloseListener{
 
@@ -107,15 +106,19 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
     }
 
     @Override
-    public void closeDialog(int year, int month, int day, String description, String category, boolean completed) {
-        addToDo(db, description, formatDate(year, month, day), category, completed);
+    public void closeDialog(int year, int month, int day, String description, String category) {
+        addToDo(db, description, formatDate(year, month, day), category);
         cursor = getAllItems(db);
         adapter.swapCursor(cursor);
     }
-
     public String formatDate(int year, int month, int day) {
         return String.format("%04d-%02d-%02d", year, month + 1, day);
     }
+
+    /**
+     * getAllItems - Gets all items in the category
+     * @param db
+     */
     private Cursor getAllItems(SQLiteDatabase db) {
         return db.query(
                 Contract.TABLE_TODO.TABLE_NAME,
@@ -134,43 +137,66 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
      * @return selectedCategory
      */
     private Cursor getCategoryItems(SQLiteDatabase db) {
-        String all[] = new String[]{
+        /*
+        String allColumns[] = new String[]{
                 Contract.TABLE_TODO._ID,
                 Contract.TABLE_TODO.COLUMN_NAME_DESCRIPTION,
                 Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE,
                 Contract.TABLE_TODO.COLUMN_NAME_CATEGORY,
                 Contract.TABLE_TODO.COLUMN_NAME_COMPLETED,
-        };
+        };*/
 
         return db.query(
                 Contract.TABLE_TODO.TABLE_NAME,
-                all,
+                null,
+                //allColumns,
                 Contract.TABLE_TODO.COLUMN_NAME_CATEGORY + "=?",
                 new String[]{selectedCategory},
+                null,
                 null,
                 null,
                 Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE
         );
     }
 
-    private long addToDo(SQLiteDatabase db, String description, String duedate, String category, boolean completed) {
+    /**
+     * addToDo - Adds to do to the database
+     * @param db
+     * @param description
+     * @param duedate
+     * @param category
+     */
+    private long addToDo(SQLiteDatabase db, String description, String duedate, String category) {
         ContentValues cv = new ContentValues();
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_DESCRIPTION, description);
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE, duedate);
 
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_CATEGORY, category);
-        cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, completed);
 
         return db.insert(Contract.TABLE_TODO.TABLE_NAME, null, cv);
     }
 
+    /**
+     * removeToDo - removes to do from the database
+     * @param db
+     * @param id
+     */
     private boolean removeToDo(SQLiteDatabase db, long id) {
         Log.d(TAG, "deleting id: " + id);
         return db.delete(Contract.TABLE_TODO.TABLE_NAME, Contract.TABLE_TODO._ID + "=" + id, null) > 0;
     }
 
-
-    private int updateToDo(SQLiteDatabase db, int year, int month, int day, String description, long id, String category, boolean completed){
+    /**
+     * updateToDo - Updates to do in the database
+     * @param db
+     * @param year
+     * @param month
+     * @param day
+     * @param description
+     * @param id
+     * @param category
+     */
+    private int updateToDo(SQLiteDatabase db, int year, int month, int day, String description, long id, String category){
 
         String duedate = formatDate(year, month - 1, day);
 
@@ -179,65 +205,64 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE, duedate);
 
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_CATEGORY, category);
-        cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, completed);
-
+        //cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, completed);
         return db.update(Contract.TABLE_TODO.TABLE_NAME, cv, Contract.TABLE_TODO._ID + "=" + id, null);
     }
 
     @Override
-    public void closeUpdateDialog(int year, int month, int day, String description, long id, String category, boolean completed) {
-        updateToDo(db, year, month, day, description, id, category, completed);
+    public void closeUpdateDialog(int year, int month, int day, String description, long id, String category) {
+        updateToDo(db, year, month, day, description, id, category);
         checkIfCategorySelected();
         adapter.swapCursor(cursor);
     }
 
     /**
-     * createMenu method
+     * onCreateOptionsMenu - Creates Menu method
+     * @param menu
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.categories, menu);
         return true;
     }
-
     /**
-     * What happens when a category is selected
+     * onOptionsItemSelected - What happens when a category is selected
+     * @param item
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int clickedItemId = item.getItemId();
-
         // display category_all
         if(clickedItemId == R.id.category_all){
             selectedCategory = "all";
             adapter.swapCursor(getAllItems(db));
+            return true;
         }
-
         // display category_school
         if(clickedItemId == R.id.category_school){
             selectedCategory = "school";
             adapter.swapCursor(getCategoryItems(db));
+            return true;
         }
-
         // display category_work
         if(clickedItemId == R.id.category_work){
             selectedCategory = "work";
             adapter.swapCursor(getCategoryItems(db));
+            return true;
         }
-
         // display category_personal
         if(clickedItemId == R.id.category_personal){
             selectedCategory = "personal";
             adapter.swapCursor(getCategoryItems(db));
+            return true;
         }
-
         // display category_other
         if(clickedItemId == R.id.category_other){
             selectedCategory = "other";
             adapter.swapCursor(getCategoryItems(db));
+            return true;
         }
-
-        return onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
 

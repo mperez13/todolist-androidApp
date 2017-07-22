@@ -11,10 +11,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.maria.perez.com.todolist.data.Contract;
-import com.maria.perez.com.todolist.data.ToDoItem;
-
-import java.util.ArrayList;
-
 
 public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHolder> {
 
@@ -30,7 +26,6 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
      */
     @Override
     public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -38,17 +33,10 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
         ItemHolder holder = new ItemHolder(view);
         return holder;
     }
-
-    /**
-     * onBindViewHolder binds the info to the viewholder
-     * @param holder
-     * @param position
-     */
     @Override
     public void onBindViewHolder(ItemHolder holder, int position) {
         holder.bind(holder, position);
     }
-
     @Override
     public int getItemCount() {
         return cursor.getCount();
@@ -82,30 +70,33 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
     }
 
     class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView descr;
-        private TextView due;
+        private TextView descriptionTextView;
+        private TextView dueTextView;
+        private TextView categoryTextView;
+
         private String duedate;
         private String description;
-        private  String category;
-        private boolean completed;
+        private String category;
+
         private long id;
+
+        private boolean completed;
         private CheckBox checkBox;
-
-
 
         // Create ItemHolder object
         ItemHolder(View view) {
             super(view);
-            descr = (TextView) view.findViewById(R.id.description);
-            due = (TextView) view.findViewById(R.id.dueDate);
+            descriptionTextView = (TextView) view.findViewById(R.id.description);
+            dueTextView = (TextView) view.findViewById(R.id.dueDate);
 
+            categoryTextView = (TextView) view.findViewById(R.id.category);
             checkBox = (CheckBox) view.findViewById(R.id.checkbox);
 
             view.setOnClickListener(this);
         }
 
         /**
-         * bindItems - This method binds the data to the itemholder. 
+         * bindItems - This method binds the data to the itemholder.
          * @param holder
          * @param pos
          */
@@ -116,10 +107,13 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
 
             duedate = cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE));
             description = cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_DESCRIPTION));
-            category = cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_CATEGORY));
 
-            descr.setText(description);
-            due.setText(duedate);
+            // Added binding data for category and completed
+            category = cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_CATEGORY));
+            completed = Boolean.getBoolean(cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED)));
+
+            descriptionTextView.setText(description);
+            dueTextView.setText(duedate);
             holder.itemView.setTag(id);
         }
 

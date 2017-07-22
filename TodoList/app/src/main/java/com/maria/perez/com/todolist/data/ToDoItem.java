@@ -20,16 +20,12 @@ public class ToDoItem {
     public String getDescription() {
         return description;
     }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public void setDescription(String description) { this.description = description; }
 
     /* Getter and setter for DUE DATE */
     public String getDueDate() {
         return dueDate;
     }
-
     public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
     }
@@ -48,7 +44,6 @@ public class ToDoItem {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
+    public void setCompleted(boolean completed){ this.completed = completed;
     }
 }

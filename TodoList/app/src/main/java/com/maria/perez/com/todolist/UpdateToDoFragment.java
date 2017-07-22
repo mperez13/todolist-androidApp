@@ -24,12 +24,13 @@ public class UpdateToDoFragment extends DialogFragment {
     private Button add;
     private final String TAG = "updatetodofragment";
     private long id;
+    // Added Spinner variable
     private Spinner spinner;
 
 
     public UpdateToDoFragment(){}
 
-    public static UpdateToDoFragment newInstance(int year, int month, int day, String description, long id, String category, boolean completed) {
+    public static UpdateToDoFragment newInstance(int year, int month, int day, String description, long id, String category) {
         UpdateToDoFragment f = new UpdateToDoFragment();
 
         // Supply num input as an argument.
@@ -38,9 +39,9 @@ public class UpdateToDoFragment extends DialogFragment {
         args.putInt("month", month);
         args.putInt("day", day);
         args.putLong("id", id);
+        // Added description and category arguments
         args.putString("description", description);
         args.putString("category", category);
-        args.putBoolean("completed", completed);
 
         f.setArguments(args);
         return f;
@@ -48,7 +49,7 @@ public class UpdateToDoFragment extends DialogFragment {
 
     //To have a way for the activity to get the data from the dialog
     public interface OnUpdateDialogCloseListener {
-        void closeUpdateDialog(int year, int month, int day, String description, long id, String category,boolean completed);
+        void closeUpdateDialog(int year, int month, int day, String description, long id, String category);
     }
 
     /**
@@ -85,11 +86,10 @@ public class UpdateToDoFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 UpdateToDoFragment.OnUpdateDialogCloseListener activity = (UpdateToDoFragment.OnUpdateDialogCloseListener) getActivity();
-                activity.closeUpdateDialog(dp.getYear(), dp.getMonth(), dp.getDayOfMonth(), toDo.getText().toString(), id, spinner.getSelectedItem().toString(), false);
+                activity.closeUpdateDialog(dp.getYear(), dp.getMonth(), dp.getDayOfMonth(), toDo.getText().toString(), id, spinner.getSelectedItem().toString());
                 UpdateToDoFragment.this.dismiss();
             }
         });
-
         return view;
     }
 }

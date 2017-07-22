@@ -81,9 +81,18 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
 
                 FragmentManager fm = getSupportFragmentManager();
 
-                UpdateToDoFragment frag = UpdateToDoFragment.newInstance(year, month, day, description, id, category, completed);
+                UpdateToDoFragment frag = UpdateToDoFragment.newInstance(year, month, day, description, id, category);
                 frag.show(fm, "updatetodofragment");
             }
+            // added to check if completed checkbox has been clicked
+            @Override
+            public void onCheckClick(int pos, boolean completed, long id){
+                ContentValues cv = new ContentValues();
+                cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, completed);
+                db.update(Contract.TABLE_TODO.TABLE_NAME, cv, Contract.TABLE_TODO._ID + "=" + id, null);
+                adapter.swapCursor(getAllItems(db));
+            }
+
         });
 
         rv.setAdapter(adapter);
@@ -170,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         ContentValues cv = new ContentValues();
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_DESCRIPTION, description);
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE, duedate);
-
+        // Add category
         cv.put(Contract.TABLE_TODO.COLUMN_NAME_CATEGORY, category);
 
         return db.insert(Contract.TABLE_TODO.TABLE_NAME, null, cv);
@@ -215,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         checkIfCategorySelected();
         adapter.swapCursor(cursor);
     }
-
     /**
      * onCreateOptionsMenu - Creates Menu method
      * @param menu
@@ -264,8 +272,6 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         }
         return super.onOptionsItemSelected(item);
     }
-
-
     /**
      * Checks if a category is selected
      */

@@ -4,17 +4,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="18dp">
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
+        android:textSize="20dp"
         android:text="To do description"/>
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
     <TextView
         android:id="@+id/category"
         android:layout_width="match_parent"
@@ -28,5 +26,10 @@
         android:layout_height="wrap_content"
         android:textSize="14dp"
         android:text="06-04-2017"/>
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/checked"/>
 
 </LinearLayout>

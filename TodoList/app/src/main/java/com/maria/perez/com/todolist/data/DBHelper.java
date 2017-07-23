@@ -23,7 +23,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE + " DATE, " +
 
                 // Add columns for category and completed
-                Contract.TABLE_TODO.COLUMN_NAME_CATEGORY + " TEXT NOT NULL, " +
+                Contract.TABLE_TODO.COLUMN_NAME_CATEGORY + " TEXT, " +
                 Contract.TABLE_TODO.COLUMN_NAME_COMPLETED + " BOOLEAN DEFAULT 0, " +
                 "); ";
 

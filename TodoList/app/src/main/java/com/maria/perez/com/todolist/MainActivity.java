@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
     private CheckBox checkBox;
 
     // set default category to ALL
-    private String selectedCategory = "all";
+    //private String selectedCategory = "all";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         helper = new DBHelper(this);
         db = helper.getWritableDatabase();
 
-        checkIfCategorySelected();
+        //checkIfCategorySelected();
+        cursor = getAllItems(db);
 
         adapter = new ToDoListAdapter(cursor, new ToDoListAdapter.ItemClickListener() {
 
@@ -84,15 +85,6 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
                 UpdateToDoFragment frag = UpdateToDoFragment.newInstance(year, month, day, description, id, category);
                 frag.show(fm, "updatetodofragment");
             }
-            // added to check if completed checkbox has been clicked
-            @Override
-            public void onCheckClick(int pos, boolean completed, long id){
-                ContentValues cv = new ContentValues();
-                cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, completed);
-                db.update(Contract.TABLE_TODO.TABLE_NAME, cv, Contract.TABLE_TODO._ID + "=" + id, null);
-                adapter.swapCursor(getAllItems(db));
-            }
-
         });
 
         rv.setAdapter(adapter);
@@ -145,20 +137,10 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
      * @param db
      * @return selectedCategory
      */
-    private Cursor getCategoryItems(SQLiteDatabase db) {
-        /*
-        String allColumns[] = new String[]{
-                Contract.TABLE_TODO._ID,
-                Contract.TABLE_TODO.COLUMN_NAME_DESCRIPTION,
-                Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE,
-                Contract.TABLE_TODO.COLUMN_NAME_CATEGORY,
-                Contract.TABLE_TODO.COLUMN_NAME_COMPLETED,
-        };*/
-
+    private Cursor getCategoryItems(SQLiteDatabase db, String selectedCategory) {
         return db.query(
                 Contract.TABLE_TODO.TABLE_NAME,
                 null,
-                //allColumns,
                 Contract.TABLE_TODO.COLUMN_NAME_CATEGORY + "=?",
                 new String[]{selectedCategory},
                 null,
@@ -221,8 +203,7 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
     @Override
     public void closeUpdateDialog(int year, int month, int day, String description, long id, String category) {
         updateToDo(db, year, month, day, description, id, category);
-        checkIfCategorySelected();
-        adapter.swapCursor(cursor);
+        adapter.swapCursor(getAllItems(db));
     }
     /**
      * onCreateOptionsMenu - Creates Menu method
@@ -233,6 +214,18 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         getMenuInflater().inflate(R.menu.categories, menu);
         return true;
     }
+
+    // added to check if completed checkbox has been clicked and updated on the database
+     public static int isTodoChecked(SQLiteDatabase db, long id, boolean isChecked){
+         ContentValues cv = new ContentValues();
+         if(isChecked){
+             cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, true);
+         }else{
+             cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, false);
+         }
+         return db.update(Contract.TABLE_TODO.TABLE_NAME, cv, Contract.TABLE_TODO._ID + "=" + id, null);
+     }
+
     /**
      * onOptionsItemSelected - What happens when a category is selected
      * @param item
@@ -242,39 +235,43 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         int clickedItemId = item.getItemId();
         // display category_all
         if(clickedItemId == R.id.category_all){
-            selectedCategory = "all";
+            //selectedCategory = "all";
+            cursor = getAllItems(db);
             adapter.swapCursor(getAllItems(db));
             return true;
         }
         // display category_school
         if(clickedItemId == R.id.category_school){
-            selectedCategory = "school";
-            adapter.swapCursor(getCategoryItems(db));
+            //selectedCategory = "school";
+            cursor = getCategoryItems(db,"school");
+            adapter.swapCursor(cursor);
             return true;
         }
         // display category_work
         if(clickedItemId == R.id.category_work){
-            selectedCategory = "work";
-            adapter.swapCursor(getCategoryItems(db));
+            //selectedCategory = "work";
+            adapter.swapCursor(cursor);
             return true;
         }
         // display category_personal
         if(clickedItemId == R.id.category_personal){
-            selectedCategory = "personal";
-            adapter.swapCursor(getCategoryItems(db));
+            //selectedCategory = "personal";
+            cursor = getCategoryItems(db,"personal");
+            adapter.swapCursor(cursor);
             return true;
         }
         // display category_other
         if(clickedItemId == R.id.category_other){
-            selectedCategory = "other";
-            adapter.swapCursor(getCategoryItems(db));
+            //selectedCategory = "other";
+            cursor = getCategoryItems(db,"other");
+            adapter.swapCursor(cursor);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
     /**
      * Checks if a category is selected
-     */
+
     public void checkIfCategorySelected(){
         if(selectedCategory.equals("all")){
             cursor = getAllItems(db);
@@ -282,6 +279,6 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         else{
             cursor = getCategoryItems(db);
         }
-    }
+    }*/
 
 }

@@ -11,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.maria.perez.com.todolist.data.Contract;
-import com.maria.perez.com.todolist.MainActivity;
 
 public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHolder> {
 
@@ -48,7 +47,6 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
      */
     public interface ItemClickListener {
         void onItemClick(int pos, String description, String duedate, long id, String category, boolean completed);
-        void onCheckClick(int pos, boolean status, long id);
     }
 
     /**
@@ -116,17 +114,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
 
             descriptionTextView.setText(description);
             dueTextView.setText(duedate);
-            // Added listener for the checkbox
-            checkBox.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    if(((CheckBox) v).isChecked()){
-                        listener.onCheckClick(getAdapterPosition(), true, id);
-                    } else{
-                        listener.onCheckClick(getAdapterPosition(), false, id);
-                    }
-                }
-            });
+            categoryTextView.setText(category);
             holder.itemView.setTag(id);
         }
 

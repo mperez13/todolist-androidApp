@@ -7,9 +7,10 @@ public class ToDoItem {
 
     // Add category and completed
     private String category;
-    private boolean completed;
+    private String completed;
+    //private boolean completed;
 
-    public ToDoItem(String description, String dueDate, String category, boolean completed) {
+    public ToDoItem(String description, String dueDate, String category, String completed) {
         this.description = description;
         this.dueDate = dueDate;
         this.category = category;
@@ -40,10 +41,10 @@ public class ToDoItem {
     }
 
     /* Getter and setter for COMPLETED */
-    public boolean getCompleted() {
+    public String getCompleted() {
         return completed;
     }
 
-    public void setCompleted(boolean completed){ this.completed = completed;
+    public void setCompleted(String completed){ this.completed = completed;
     }
 }

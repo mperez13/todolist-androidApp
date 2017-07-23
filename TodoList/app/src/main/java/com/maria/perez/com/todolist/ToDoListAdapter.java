@@ -46,7 +46,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
      * ItemClickListener - Is an interface that is used in the MainActivity for when things are picked
      */
     public interface ItemClickListener {
-        void onItemClick(int pos, String description, String duedate, long id, String category, boolean completed);
+        void onItemClick(int pos, String description, String duedate, long id, String category, String completed);
     }
 
     /**
@@ -80,8 +80,8 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
 
         private long id;
 
-        private boolean completed;
-        private CheckBox checkBox;
+        private String isDone;
+        CheckBox isDoneCheckBox;
 
         // Create ItemHolder object
         ItemHolder(View view) {
@@ -90,7 +90,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
             dueTextView = (TextView) view.findViewById(R.id.dueDate);
 
             categoryTextView = (TextView) view.findViewById(R.id.category);
-            checkBox = (CheckBox) view.findViewById(R.id.checked);
+            isDoneCheckBox = (CheckBox) view.findViewById(R.id.completed);
 
             view.setOnClickListener(this);
         }
@@ -110,7 +110,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
 
             // Added binding data for category and completed
             category = cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_CATEGORY));
-            completed = Boolean.getBoolean(cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED)));
+            isDone = cursor.getString(cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED));
 
             descriptionTextView.setText(description);
             dueTextView.setText(duedate);
@@ -121,7 +121,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ItemHo
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            listener.onItemClick(pos, description, duedate, id, category, completed);
+            listener.onItemClick(pos, description, duedate, id, category, isDone);
         }
     }
 

@@ -16,7 +16,6 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-import static android.R.attr.category;
 import static android.R.attr.id;
 
 public class AddToDoFragment extends DialogFragment{
@@ -43,19 +42,18 @@ public class AddToDoFragment extends DialogFragment{
         dp = (DatePicker) view.findViewById(R.id.datePicker);
         add = (Button) view.findViewById(R.id.add);
 
-        // Add category spinner
-        spinner = (Spinner) view.findViewById(R.id.category_spinner);
-        //fill the created spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(), R.array.picked_category, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
         dp.updateDate(year, month, day);
 
+        // Add category spinner
+        spinner = (Spinner) view.findViewById(R.id.category);
+        //fill the created spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(), R.array.picked_category, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override

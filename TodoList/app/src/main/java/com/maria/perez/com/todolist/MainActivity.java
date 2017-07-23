@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
     ToDoListAdapter adapter;
     private final String TAG = "mainactivity";
 
-    private CheckBox checkBox;
-
     // set default category to ALL
     //private String selectedCategory = "all";
 
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         adapter = new ToDoListAdapter(cursor, new ToDoListAdapter.ItemClickListener() {
 
             @Override
-            public void onItemClick(int pos, String description, String duedate, long id, String category, boolean completed) {
+            public void onItemClick(int pos, String description, String duedate, long id, String category, String completed) {
                 Log.d(TAG, "item click id: " + id);
                 String[] dateInfo = duedate.split("-");
                 int year = Integer.parseInt(dateInfo[0].replaceAll("\\s",""));
@@ -131,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
                 Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE
         );
     }
-
     /**
      * If a category is selected, getCategoryItems method will get all items from that category
      * @param db
@@ -141,8 +138,7 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
         return db.query(
                 Contract.TABLE_TODO.TABLE_NAME,
                 null,
-                Contract.TABLE_TODO.COLUMN_NAME_CATEGORY + "=?",
-                new String[]{selectedCategory},
+                Contract.TABLE_TODO.COLUMN_NAME_CATEGORY + "='" + selectedCategory + "'",
                 null,
                 null,
                 null,
@@ -216,12 +212,12 @@ public class MainActivity extends AppCompatActivity implements AddToDoFragment.O
     }
 
     // added to check if completed checkbox has been clicked and updated on the database
-     public static int isTodoChecked(SQLiteDatabase db, long id, boolean isChecked){
+     public static int isTodoChecked(SQLiteDatabase db, long id, boolean isDone){
          ContentValues cv = new ContentValues();
-         if(isChecked){
-             cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, true);
+         if(isDone){
+             cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, "done");
          }else{
-             cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, false);
+             cv.put(Contract.TABLE_TODO.COLUMN_NAME_COMPLETED, " ");
          }
          return db.update(Contract.TABLE_TODO.TABLE_NAME, cv, Contract.TABLE_TODO._ID + "=" + id, null);
      }

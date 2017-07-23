@@ -21,7 +21,7 @@
             app:showAsAction="collapseActionView"
             />
         <item
-            android:title="Wersonal"
+            android:title="Personal"
             android:id="@+id/category_personal"
             android:orderInCategory="4"
             app:showAsAction="collapseActionView"
